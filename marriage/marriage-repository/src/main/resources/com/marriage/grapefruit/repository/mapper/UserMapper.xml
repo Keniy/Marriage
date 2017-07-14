@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.marriage.grapefruit.repository.mapper.UserMapper">
+
+    <resultMap id="userMap" type="com.marriage.grapefruit.model.entity.User">
+        <id property="id" column="id"/>
+        <result property="userName" column="user_name"/>
+        <result property="nickName" column="nick_name"/>
+        <result property="password" column="password"/>
+        <result property="historyPassword" column="history_password"/>
+        <result property="rePassword" column="re_password"/>
+        <result property="sign" column="sign"/>
+        <result property="mobilePhone" column="mobile_phone"/>
+        <result property="address" column="address"/>
+        <result property="wechat" column="wechat"/>
+        <result property="email" column="email"/>
+    </resultMap>
+    
+    <sql id="queryCondition">
+        <where>
+			<if test="id != null and id != ''">
+				and id = #{id}
+			</if>
+			<if test="nickName != null and nickName != ''">
+				and nick_name = #{nickName}
+			</if>
+			<if test="userName != null and userName != ''">
+				and user_name = #{userName}
+			</if>
+			<if test="password != null and password != ''">
+				and password = #{password}
+			</if>
+			<if test="rePassword != null and rePassword != ''">
+				and re_password = #{rePassword}
+			</if>
+			<if test="historyPassword != null and historyPassword != ''">
+				and history_password = #{historyPassword}
+			</if>
+			<if test="email != null and email != ''">
+				and email = #{email}
+			</if>
+			<if test="mobilePhone != null and mobilePhone != ''">
+				and mobile_phone = #{mobilePhone}
+			</if>
+			<if test="sign != null and sign != ''">
+				and sign = #{sign}
+			</if>
+			<if test="address != null and address != ''">
+				and address = #{address}
+			</if>
+			<if test="wechat != null and wechat != ''">
+				and wechat = #{wechat}
+			</if>
+		</where>
+    </sql>
+
+    <insert id="insertUser" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO
+          sys_user (id, user_name, password)
+        VALUES
+          (#{id}, #{userName}, #{password})
+    </insert>
+
+    <update id="updateUserOnPasswordById">
+        UPDATE
+          sys_user
+        SET
+          user_name = #{userName}
+        WHERE
+          id = #{id}
+    </update>
+
+    <delete id="deleteUserById">
+        DELETE FROM
+          sys_user
+        WHERE
+          id = #{id}
+    </delete>
+
+    <select id="selectUserById" resultMap="userMap">
+        SELECT
+          *
+        FROM
+          sys_user
+        WHERE
+          id = #{id}
+    </select>
+
+    <select id="selectUserByUsername" resultMap="userMap">
+        SELECT
+          *
+        FROM
+          sys_user
+        WHERE
+          user_name = #{userName}
+    </select>
+
+    <select id="selectAllUsers" resultMap="userMap">
+        SELECT
+          *
+        FROM
+          sys_user
+    </select>
+    
+    <select id="getByMap" parameterType="map" resultMap="userMap">
+    	SELECT u.* FROM sys_user u
+		<include refid="queryCondition" />
+		ORDER  by id DESC 
+    </select>
+
+    
+    <select id="getById" parameterType="int" resultMap="userMap">
+    	SELECT * FROM sys_user WHERE id =#{id}
+    </select>
+
+	<select id="getByUserName" parameterType="String" resultMap="userMap">
+		select u.* from sys_user u
+		where user_name= #{userName}
+	</select>
+
+	<insert id="create" parameterType="com.marriage.grapefruit.model.entity.User">
+        <selectKey resultType="int"  order="AFTER" keyProperty="id" >
+			SELECT LAST_INSERT_ID()
+		</selectKey>
+		INSERT INTO sys_user(
+			id,
+			user_name,
+			nick_name,
+			password,
+			re_password,
+			history_password,
+			email,
+			mobile_phone,
+			wechat,
+			address,
+			sign
+		)VALUES(
+			#{id},
+			#{nickName},
+			#{userName},
+			#{password},
+			#{rePassword},
+			#{historyPassword},
+			#{email},
+			#{mobilePhone},
+			#{wechat},
+			#{address},
+			#{sign}
+		)
+    </insert>
+    
+    <update id="update" parameterType="com.marriage.grapefruit.model.entity.User">
+		UPDATE user 
+		  <set>
+			<if test = "userName != null and userName != ''">	
+				user_name = #{userName},
+			</if>
+			<if test = "nickName != null and nickName != ''">	
+				nick_name = #{nickName},
+			</if>
+			<if test = "password != null and password != ''">
+				password = #{password},
+			</if>
+			<if test = "rePassword != null and rePassword != ''">
+				re_password = #{rePassword},
+			</if>
+			<if test = "historyPassword != null and historyPassword != ''">
+				history_password = #{historyPassword},
+			</if>
+			<if test="email != null and email != ''">
+				email = #{email},
+			</if>
+			<if test="address != null and address != ''">		
+				address = #{address},
+			</if>
+			<if test="mobilePhone != null and mobilePhone != ''">
+				mobile_phone = #{mobilePhone},
+			</if>
+			<if test="sign != null and sign != ''">
+				sign = #{sign},
+			</if>
+		 </set>			
+		WHERE id = #{id}
+    </update>
+    
+    <delete id="delete" parameterType="int">
+    	DELETE FROM sys_user WHERE id = #{id}
+    </delete>
+
+</mapper>
