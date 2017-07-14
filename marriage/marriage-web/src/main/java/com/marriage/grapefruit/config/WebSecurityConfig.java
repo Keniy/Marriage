@@ -15,7 +15,7 @@ import com.marriage.grapefruit.service.UrlUserService;
 import com.marriage.grapefruit.utils.MD5Util;
 
 
-@Configuration
+@Configuration 
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
