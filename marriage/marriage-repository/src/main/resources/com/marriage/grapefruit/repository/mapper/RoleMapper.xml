@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.marriage.grapefruit.repository.mapper.RoleMapper">
+	<resultMap id="BaseResultMap" type="com.marriage.grapefruit.model.entity.Role">
+		<id column="id" jdbcType="INTEGER" property="id" />
+		<result column="name" jdbcType="VARCHAR" property="name" />
+		<result column="enable" jdbcType="BIT" property="enable" />
+		<result column="role_level" jdbcType="INTEGER" property="roleLevel" />
+		<result column="description" jdbcType="VARCHAR" property="description" />
+		<result column="menu_items" jdbcType="VARCHAR" property="menuItems" />
+	</resultMap>
+
+	<select id="list" resultMap="BaseResultMap">
+		select id, name, enable, role_level, description, menu_items from
+		sys_role
+		<where>
+			<if test="name != null and name != '' ">
+				and name like concat('%', #{roleName}, '%');
+			</if>
+		</where>
+	</select>
+
+	<select id="fineOne" resultMap="BaseResultMap">
+		select * from sys_role where id = #{roleId};
+	</select>
+
+	<select id="findByName" resultMap="BaseResultMap">
+		select * from sys_role where name = #{roleName};
+	</select>
+
+	<insert id="insertRole" useGeneratedKeys="true" keyProperty="id">
+		insert into
+		sys_role (name, enable, role_level, description, menu_items)
+		values
+		(#{name}, #{enable}, #{roleLevel}, #{description}, #{menuItems})
+	</insert>
+
+	<update id="updateRole">
+		update
+		sys_role
+		set
+		name = #{name}
+		WHERE
+		id = #{id}
+	</update>
+
+	<delete id="deleteRole">
+		delete from
+		sys_role
+		where
+		id = #{id}
+	</delete>
+</mapper>

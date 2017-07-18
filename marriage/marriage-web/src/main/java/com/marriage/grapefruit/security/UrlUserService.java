@@ -1,4 +1,4 @@
-package com.marriage.grapefruit.service;
+package com.marriage.grapefruit.security;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,7 +16,6 @@ import com.marriage.grapefruit.model.entity.Permission;
 import com.marriage.grapefruit.model.entity.User;
 import com.marriage.grapefruit.repository.PermissionRepository;
 import com.marriage.grapefruit.repository.UserRepository;
-import com.marriage.grapefruit.security.UrlGrantedAuthority;
 
 @Service
 public class UrlUserService implements UserDetailsService{

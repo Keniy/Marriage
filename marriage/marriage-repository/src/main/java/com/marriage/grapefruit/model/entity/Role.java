@@ -16,6 +16,7 @@ public class Role implements Comparable<Role>{
 	private Integer id;
 	private String name;
 	private Integer roleLevel;
+	private Boolean enable;
 	private String description;
 	private String menuItems;
 
