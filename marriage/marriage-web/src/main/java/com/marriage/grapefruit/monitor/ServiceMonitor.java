@@ -23,7 +23,7 @@ public class ServiceMonitor {
      * in a type in the com.shawn.service package or any sub-package
      * under that.
      */
-    @Pointcut("execution(* com.marriage.grapefruit.service..*(..))")
+    @Pointcut("execution(* com.marriage.grapefruit.service..*(..)) or execution(* com.marriage.grapefruit.security..*(..))")
     private void serviceLayer() {
     }
 

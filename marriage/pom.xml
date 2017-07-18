@@ -22,6 +22,7 @@
 		<commons-lang3.version>3.4</commons-lang3.version>
 		<commons-collections4.version>4.1</commons-collections4.version>
 		<junit.version>3.8.1</junit.version>
+		<fastjson.version>1.2.35</fastjson.version>
 	</properties>
 
 	<modules>
@@ -72,6 +73,13 @@
 				<artifactId>junit</artifactId>
 				<version>${junit.version}</version>
 				<scope>test</scope>
+			</dependency>
+			
+			<!-- https://mvnrepository.com/artifact/com.alibaba/fastjson -->
+			<dependency>
+			    <groupId>com.alibaba</groupId>
+			    <artifactId>fastjson</artifactId>
+			    <version>${fastjson.version}</version>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
