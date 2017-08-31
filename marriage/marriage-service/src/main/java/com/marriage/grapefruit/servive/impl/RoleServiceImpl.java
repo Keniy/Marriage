@@ -2,37 +2,55 @@ package com.marriage.grapefruit.servive.impl;
 
 import java.util.List;
 
-import org.apache.ibatis.session.SqlSession;
-import org.apache.ibatis.session.SqlSessionFactory;
-import org.apache.ibatis.session.SqlSessionFactoryBuilder;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import javax.annotation.Resource;
 
-import com.marriage.grapefruit.model.entity.Role;
-import com.marriage.grapefruit.repository.RoleRepository;
-import com.marriage.grapefruit.repository.mapper.RoleMapper;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
+import com.marriage.grapefruit.mapper.RoleMapper;
+import com.marriage.grapefruit.mapper.RoleResourcesMapper;
+import com.marriage.grapefruit.model.Role;
+import com.marriage.grapefruit.model.RoleResources;
 import com.marriage.grapefruit.servive.RoleService;
 
-@Service
-public class RoleServiceImpl extends BaseServiceImpl implements RoleService{
+import tk.mybatis.mapper.entity.Example;
+
+@Service("roleService")
+public class RoleServiceImpl extends BaseService<Role> implements RoleService{
 	
-	@Autowired
-	RoleRepository roleRepository;
+	@Resource
+    private RoleMapper roleMapper;
+    @Resource
+    private RoleResourcesMapper roleResourcesMapper;
 
-	@Override
-	public List<Role> list(String name) {
-		return null;
-	}
+    @Override
+    public List<Role> queryRoleListWithSelected(Integer uid) {
+        return roleMapper.queryRoleListWithSelected(uid);
+    }
 
-	@Override
-	public Role findOne(Integer id) {
-		return null;
-	}
+    @Override
+    public PageInfo<Role> selectByPage(Role role, int start, int length) {
+        int page = start/length+1;
+        Example example = new Example(Role.class);
+        //分页查询
+        PageHelper.startPage(page, length);
+        List<Role> rolesList = selectByExample(example);
+        return new PageInfo<>(rolesList);
+    }
 
-	@Override
-	public Role findByName(String name) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    @Override
+    @Transactional(propagation= Propagation.REQUIRED,readOnly=false,rollbackFor={Exception.class})
+    public void delRole(Integer roleid) {
+        //删除角色
+        mapper.deleteByPrimaryKey(roleid);
+        //删除角色资源
+        Example example = new Example(RoleResources.class);
+        Example.Criteria criteria = example.createCriteria();
+        criteria.andEqualTo("roleid",roleid);
+        roleResourcesMapper.deleteByExample(example);
 
+    }
 }

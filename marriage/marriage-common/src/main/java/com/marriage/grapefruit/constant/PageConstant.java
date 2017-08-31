@@ -1,8 +1,5 @@
 package com.marriage.grapefruit.constant;
 
-/**
- * @author Xiaoyue Xiao
- */
 public class PageConstant {
 
     public static final int PAGE = 1; // Default page number

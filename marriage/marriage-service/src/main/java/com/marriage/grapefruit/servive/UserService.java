@@ -1,23 +1,13 @@
 package com.marriage.grapefruit.servive;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import com.github.pagehelper.PageInfo;
+import com.marriage.grapefruit.model.User;
 
-import org.springframework.security.core.userdetails.UserDetailsService;
+public interface UserService extends IService<User>{
+	
+	PageInfo<User> selectByPage(User user, int start, int length);
 
-import com.marriage.grapefruit.model.entity.User;
+    User selectByUsername(String username);
 
-public interface UserService extends UserDetailsService {
-
-    Optional<User> getUserById(Integer id);
-
-    boolean saveUser(User user);
-
-    boolean modifyUserOnPasswordById(User user);
-
-    boolean deleteUserById(Integer id);
-    
-    List<User> list(Map<String, Object> map);
-
+    void delUser(Integer userid);
 }

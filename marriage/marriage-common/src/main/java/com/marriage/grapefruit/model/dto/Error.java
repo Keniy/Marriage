@@ -19,5 +19,7 @@ public class Error implements Serializable {
 
     private int code; // Error code
     private String message; // Error message
+    private String token;
+    
 
 }

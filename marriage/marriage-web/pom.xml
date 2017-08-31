@@ -41,22 +41,34 @@
 			<artifactId>spring-security-oauth2</artifactId>
 		</dependency>
 		
-		<!-- Spring Security Web -->
 		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-data-jpa</artifactId>
+		</dependency>
+		
+		<!-- Spring Security Web -->
+		<!-- <dependency>
 			<groupId>org.springframework.security</groupId>
 			<artifactId>spring-security-web</artifactId>
 		</dependency>
 		
-		<!-- Spring Security Config -->
+		Spring Security Config
 		<dependency>
 			<groupId>org.springframework.security</groupId>
 			<artifactId>spring-security-config</artifactId>
 		</dependency>
 		
-		<!-- Spring Security Taglibs -->
+		Spring Security Taglibs
 		<dependency>
 			<groupId>org.springframework.security</groupId>
 			<artifactId>spring-security-taglibs</artifactId>
+		</dependency> -->
+		
+		
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-test</artifactId>
+			<scope>test</scope>
 		</dependency>
 		
 		<!-- Lombok - Make Java look less redundant -->
@@ -74,20 +86,23 @@
 
         <!-- Databases - Uses HSQL by default -->
         <dependency>
-            <groupId>org.hsqldb</groupId>
-            <artifactId>hsqldb</artifactId>
-            <scope>runtime</scope>
-        </dependency>
+			<groupId>org.hsqldb</groupId>
+			<artifactId>hsqldb</artifactId>
+		</dependency>
 
         <dependency>
         	<groupId>com.grapefruit</groupId>
         	<artifactId>marriage-service</artifactId>
         	<version>0.0.1-SNAPSHOT</version>
         </dependency>
+
         <dependency>
-        	<groupId>org.apache.camel</groupId>
-        	<artifactId>camel-core</artifactId>
-        	<version>2.16.3</version>
+        	<groupId>org.springframework.boot</groupId>
+        	<artifactId>spring-boot-starter-data-redis</artifactId>
+        </dependency>
+        <dependency>
+        	<groupId>org.springframework.boot</groupId>
+        	<artifactId>spring-boot-starter-actuator</artifactId>
         </dependency>
 	</dependencies>
 

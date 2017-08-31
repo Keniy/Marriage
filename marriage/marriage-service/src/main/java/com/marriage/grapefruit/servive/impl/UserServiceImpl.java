@@ -1,64 +1,70 @@
 package com.marriage.grapefruit.servive.impl;
 
 import java.util.List;
-import java.util.Map;
-import java.util.Optional;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import javax.annotation.Resource;
+
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
-import com.marriage.grapefruit.model.entity.User;
-import com.marriage.grapefruit.repository.UserRepository;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
+import com.marriage.grapefruit.mapper.UserRoleMapper;
+import com.marriage.grapefruit.model.User;
+import com.marriage.grapefruit.model.UserRole;
 import com.marriage.grapefruit.servive.UserService;
 
-@Service
-public class UserServiceImpl implements UserService {
+import tk.mybatis.mapper.entity.Example;
+import tk.mybatis.mapper.util.StringUtil;
 
-    private final UserRepository userRepository;
-
-    @Autowired
-    public UserServiceImpl(UserRepository userRepository) {
-        this.userRepository = userRepository;
-    }
+@Service("userService")
+public class UserServiceImpl extends BaseService<User> implements UserService{
+	
+	@Resource
+    private UserRoleMapper userRoleMapper;
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = userRepository.selectUserByUsername(username);
-
-        if (user == null) {
-            throw new UsernameNotFoundException("Could not find the user '" + username + "'");
+    public PageInfo<User> selectByPage(User user, int start, int length) {
+        int page = start/length+1;
+        Example example = new Example(User.class);
+        Example.Criteria criteria = example.createCriteria();
+        if (StringUtil.isNotEmpty(user.getUsername())) {
+            criteria.andLike("username", "%" + user.getUsername() + "%");
         }
-
-        // Not involve authorities, so pass null to authorities
-//        return new CustomUserDetails(user, true, true, true, true, null);
-        return null;
+        if (user.getId() != null) {
+            criteria.andEqualTo("id", user.getId());
+        }
+        if (user.getEnable() != null) {
+            criteria.andEqualTo("enable", user.getEnable());
+        }
+        //分页查询
+        PageHelper.startPage(page, length);
+        List<User> userList = selectByExample(example);
+        return new PageInfo<>(userList);
     }
 
     @Override
-    public Optional<User> getUserById(Integer id) {
-        return Optional.ofNullable(userRepository.selectUserById(id));
+    public User selectByUsername(String username) {
+        Example example = new Example(User.class);
+        Example.Criteria criteria = example.createCriteria();
+        criteria.andEqualTo("username",username);
+        List<User> userList = selectByExample(example);
+        if(userList.size()>0){
+            return userList.get(0);
+        }
+            return null;
     }
 
     @Override
-    public boolean saveUser(User user) {
-        return userRepository.insertUser(user) > 0;
+    @Transactional(propagation= Propagation.REQUIRED,readOnly=false,rollbackFor={Exception.class})
+    public void delUser(Integer userid) {
+        //删除用户表
+        mapper.deleteByPrimaryKey(userid);
+        //删除用户角色表
+        Example example = new Example(UserRole.class);
+        Example.Criteria criteria = example.createCriteria();
+        criteria.andEqualTo("userid",userid);
+        userRoleMapper.deleteByExample(example);
     }
-
-    @Override
-    public boolean modifyUserOnPasswordById(User user) {
-        return userRepository.updateUserOnPasswordById(user) > 0;
-    }
-
-    @Override
-    public boolean deleteUserById(Integer id) {
-        return userRepository.deleteUserById(id) > 0;
-    }
-
-	@Override
-	public List<User> list(Map<String, Object> map) {
-		return userRepository.getByMap(map);
-	}
-
 }
